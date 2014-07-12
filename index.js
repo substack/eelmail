@@ -1,5 +1,6 @@
 var net = require('net');
 var EventEmitter = require('events').EventEmitter;
+var inherits = require('inherits');
 
 var services = {
     smtp: require('./lib/smtp.js'),
@@ -16,15 +17,11 @@ function Eel (db, opts) {
     this.db = db;
 }
 
-Eel.prototype.createStream = function (name) {
+Eel.prototype.createServer = function (name, opts) {
     if (!has(services, name)) return undefined;
-    return services[name](self);
+    return services[name](this, opts);
 };
 
-Eel.prototype.createServer = function (name) {
-    if (!has(services, name)) return undefined;
-    var self = this;
-    return net.createServer(function (stream) {
-        stream.pipe(self.createStream(name)).pipe(stream);
-    });
-};
+function has (obj, key) {
+    return Object.prototype.hasOwnProperty.call(obj, key);
+}

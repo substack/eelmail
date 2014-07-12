@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var fs = require('fs');
 var eelmail = require('../');
 var em = eelmail();

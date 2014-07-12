@@ -7,6 +7,7 @@ var forwards = {
 Object.keys(forwards).forEach(function (src) {
     var dst = forwards[src];
     var server = net.createServer(function (stream) {
+console.log('CONNECTION', src); 
         var c = net.connect(dst);
         c.on('error', function () {});
         stream.on('error', function () {});
