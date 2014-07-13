@@ -1,9 +1,10 @@
 var net = require('net');
-var x256 = require('x256');
-var through = require('through2');
+var colorize = require('ansi-color-stream');
+
 var forwards = {
-    25: 9025,
-    143: 9143
+    25: 9025, // smtp
+    143: 9143, // imap
+    993: 9993 // imap ssl
 };
 
 Object.keys(forwards).forEach(function (src) {
@@ -23,21 +24,10 @@ Object.keys(forwards).forEach(function (src) {
             console.error(err + '');
         });
         
-        stream.pipe(colorize([ 63, 255, 63 ])).pipe(process.stderr);
-        c.pipe(colorize([ 63, 63, 255 ])).pipe(process.stderr);
+        stream.pipe(colorize('bright pink')).pipe(process.stderr);
+        c.pipe(colorize('bright yellow')).pipe(process.stderr);
         
         c.pipe(stream).pipe(c);
     });
     server.listen(src);
 });
-
-function colorize (rgb) {
-    return through(function (buf, enc, next) {
-        this.push(Buffer.concat([
-            Buffer('\x1b[38;5;' + x256(rgb) + 'm'),
-            buf,
-            Buffer('\x1b[00m')
-        ]));
-        next();
-    });
-}
