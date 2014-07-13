@@ -1,6 +1,7 @@
 var net = require('net');
 var EventEmitter = require('events').EventEmitter;
 var inherits = require('inherits');
+var bytewise = require('bytewise');
 
 var services = {
     smtp: require('./lib/smtp.js'),
@@ -20,6 +21,12 @@ function Eel (db, opts) {
 Eel.prototype.createServer = function (name, opts) {
     if (!has(services, name)) return undefined;
     return services[name](this, opts);
+};
+
+Eel.prototype.login = function (creds, cb) {
+    var key = [ 'user', ];
+    this.db.get(key, { keyEncoding: bytewise }, function (err, row) {
+    });
 };
 
 function has (obj, key) {
