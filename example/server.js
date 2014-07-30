@@ -1,4 +1,3 @@
-var fs = require('fs');
 var eelmail = require('../');
 var level = require('level');
 var bytewise = require('bytewise');
