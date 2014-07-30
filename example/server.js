@@ -2,10 +2,7 @@ var eelmail = require('../');
 var level = require('level');
 var bytewise = require('bytewise');
 
-var db = level('data', {
-    keyEncoding: require('bytewise'),
-    valueEncoding: 'utf8'
-});
+var db = level('./data.db');
 var em = eelmail(db);
 
 em.createServer('smtp').listen(9025);
