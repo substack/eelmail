@@ -1,0 +1,4 @@
+
+```
+fetchmail -u substack localhost
+```

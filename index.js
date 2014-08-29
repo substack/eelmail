@@ -1,6 +1,6 @@
-var net = require('net');
 var EventEmitter = require('events').EventEmitter;
 var inherits = require('inherits');
+var has = require('has');
 
 var accountdown = require('accountdown');
 var basic = require('accountdown-basic');
@@ -14,17 +14,13 @@ var services = {
 module.exports = Eel;
 inherits(Eel, EventEmitter);
 
-function Eel (db) {
-    if (!(this instanceof Eel)) return new Eel(db);
-    this.db = db;
-    this.users = accountdown(db, { login: { basic: basic } });
+function Eel (opts) {
+    if (!(this instanceof Eel)) return new Eel(opts);
+    if (!opts) opts = {};
+    this.users = opts.users;
 }
 
 Eel.prototype.createServer = function (name, opts) {
     if (!has(services, name)) return undefined;
     return services[name](this, opts);
 };
-
-function has (obj, key) {
-    return Object.prototype.hasOwnProperty.call(obj, key);
-}

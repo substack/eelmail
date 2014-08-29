@@ -1,32 +1,20 @@
 #!/usr/bin/env node
 
 var eelmail = require('../');
+var accountdown = require('accountdown');
 var level = require('level');
-var bytewise = require('bytewise');
-var shasum = require('shasum');
-
-var db = level('data', {
-    keyEncoding: require('bytewise'),
-    valueEncoding: 'utf8'
-});
+var db = level('data');
 
 var em = eelmail({
-    testAccount: function (type, creds, cb) {
-        if (type === 'login') {
-            db.get([ 'account', creds[0] ], function (err, row) {
-                if (err) cb(null, false)
-                else cb(row && row.hash && hash(row.salt, creds[1]))
-            });
-        }
-        else cb(null, false);
-    },
-    addAccount: function (type, creds, cb) {
-        if (type === 'login') {
-        }
-    }
+    users: accountdown(db, {
+        login: { basic: require('accountdown-basic') }
+    })
 });
 
-function hash (salt, s) { return shasum(salt + s) }
+em.users.create('substack', {
+    login: { basic: { username: 'substack', password: 'beep boop' } },
+    value: { bio: 'beep boop' }
+});
 
 em.createServer('smtp').listen(9025);
 em.createServer('pop').listen(9110);
