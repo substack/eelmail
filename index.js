@@ -2,6 +2,7 @@ var EventEmitter = require('events').EventEmitter;
 var inherits = require('inherits');
 var has = require('has');
 
+var maildb = require('maildb');
 var accountdown = require('accountdown');
 var basic = require('accountdown-basic');
 
@@ -14,10 +15,11 @@ var services = {
 module.exports = Eel;
 inherits(Eel, EventEmitter);
 
-function Eel (opts) {
-    if (!(this instanceof Eel)) return new Eel(opts);
+function Eel (db, opts) {
+    if (!(this instanceof Eel)) return new Eel(db, opts);
     if (!opts) opts = {};
-    this.users = opts.users;
+    this.users = opts.users || accountdown(db, { login: { basic: basic } });
+    this.mailbox = opts.mailbox || maildb(db, opts.dir);
 }
 
 Eel.prototype.createServer = function (name, opts) {

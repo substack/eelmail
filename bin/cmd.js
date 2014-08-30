@@ -1,15 +1,9 @@
 #!/usr/bin/env node
 
 var eelmail = require('../');
-var accountdown = require('accountdown');
 var level = require('level');
 var db = level('data');
-
-var em = eelmail({
-    users: accountdown(db, {
-        login: { basic: require('accountdown-basic') }
-    })
-});
+var em = eelmail(db);
 
 em.users.create('substack', {
     login: { basic: { username: 'substack', password: 'beep boop' } },
