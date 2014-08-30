@@ -1,0 +1,45 @@
+{
+  "name": "eelmail",
+  "version": "1.0.0",
+  "description": "email server",
+  "main": "index.js",
+  "bin": {
+    "eelmail": "bin/cmd.js"
+  },
+  "dependencies": {
+    "accountdown": "~1.0.2",
+    "accountdown-basic": "~1.0.0",
+    "ansi-color-stream": "~1.0.0",
+    "bytewise": "~0.7.0",
+    "duplexer2": "~0.0.2",
+    "has": "~0.0.1",
+    "imap-parser": "~0.0.1",
+    "level": "~0.18.0",
+    "maildb": "~1.0.0",
+    "smtp-protocol": "~2.3.2",
+    "through2": "~1.0.0"
+  },
+  "devDependencies": {
+    "tape": "^2.13.2"
+  },
+  "scripts": {
+    "test": "tape test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/substack/eelmail.git"
+  },
+  "homepage": "https://github.com/substack/eelmail",
+  "keywords": [
+    "email",
+    "server",
+    "imap",
+    "smtp"
+  ],
+  "author": {
+    "name": "James Halliday",
+    "email": "mail@substack.net",
+    "url": "http://substack.net"
+  },
+  "license": "MIT"
+}
