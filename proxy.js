@@ -20,7 +20,7 @@ Object.keys(forwards).forEach(function (src) {
         c.on('error', function (err) {
             console.error(err + '');
         });
-        stream.on('error', function () {
+        stream.on('error', function (err) {
             console.error(err + '');
         });
         
