@@ -1,0 +1,9 @@
+helo localhost
+mail from: alice@arpa.mil
+rcpt to: mail@substack.net
+data
+subject: yo
+
+
+beep boop
+.
