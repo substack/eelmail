@@ -2,7 +2,7 @@ var net = require('net');
 var colorize = require('ansi-color-stream');
 
 var forwards = {
-    25: 9025, // smtp
+//    25: 9025, // smtp
     143: 9143, // imap
     993: 9993 // imap ssl
 };

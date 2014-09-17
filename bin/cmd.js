@@ -5,8 +5,8 @@ var level = require('level');
 var db = level('data');
 var em = eelmail(db);
 
-em.users.create('mail@substack.net', {
-    login: { basic: { username: 'mail@substack.net', password: 'beep boop' } },
+em.users.create('substack@localhost', {
+    login: { basic: { username: 'substack', password: 'beep boop' } },
     value: { bio: 'beep boop' }
 });
 
