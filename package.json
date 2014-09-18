@@ -7,17 +7,18 @@
     "eelmail": "bin/cmd.js"
   },
   "dependencies": {
-    "accountdown": "~1.0.2",
-    "accountdown-basic": "~1.0.0",
-    "ansi-color-stream": "~1.0.0",
+    "accountdown": "^1.0.2",
+    "accountdown-basic": "^1.0.0",
+    "ansi-color-stream": "^1.0.0",
     "bytewise": "~0.7.0",
     "duplexer2": "~0.0.2",
     "has": "~0.0.1",
     "imap-parser": "~0.0.1",
     "level": "~0.18.0",
-    "maildb": "~1.0.0",
-    "smtp-protocol": "~2.3.2",
-    "through2": "~1.0.0"
+    "maildb": "^2.2.0",
+    "smtp-protocol": "^2.3.2",
+    "through2": "^1.0.0",
+    "minimist": "^1.1.0"
   },
   "devDependencies": {
     "tape": "^2.13.2"
