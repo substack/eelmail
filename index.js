@@ -19,7 +19,7 @@ function Eel (db, opts) {
     if (!(this instanceof Eel)) return new Eel(db, opts);
     if (!opts) opts = {};
     this.users = opts.users || accountdown(db, { login: { basic: basic } });
-    this.mailbox = opts.mailbox || maildb(db, opts.dir);
+    this.mailbox = opts.mailbox || maildb(db, opts);
 }
 
 Eel.prototype.createServer = function (name, opts) {

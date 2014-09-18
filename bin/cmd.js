@@ -2,8 +2,8 @@
 
 var eelmail = require('../');
 var level = require('level');
-var db = level('data');
-var em = eelmail(db);
+var db = level('/tmp/mail/db');
+var em = eelmail(db, { dir: '/tmp/mail/blob' });
 
 em.users.create('substack@localhost', {
     login: { basic: { username: 'substack', password: 'beep boop' } },
