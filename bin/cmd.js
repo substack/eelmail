@@ -31,7 +31,7 @@ if (process.argv[2] === 'users') {
     }).pipe(process.stdout);
 }
 else if (argv.help) {
-    showHelp(0);
+    showHelp(0, function () { db.close() });
 }
 else if (argv._[0] === 'server') {
     var servers = {
@@ -41,12 +41,13 @@ else if (argv._[0] === 'server') {
     servers.smtp.listen(argv.ports.smtp);
     servers.imap.listen(argv.ports.imap);
 }
-else showHelp(1);
+else showHelp(1, function () { db.close() });
 
-function showHelp (code) {
+function showHelp (code, cb) {
     var r = fs.createReadStream(path.join(__dirname, 'usage.txt'));
-    if (code) r.once('end', function () {
-        process.exit(code);
+    r.once('end', function () {
+        if (cb) cb();
+        if (code) process.exit(code);
     });
     r.pipe(process.stdout);
 }
