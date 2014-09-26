@@ -1,17 +1,23 @@
-eelmail {-d DATADIR} users ...
+Usage: eelmail COMMAND...
 
-  Manage eelmail user accounts.
-  Run `eelmail users -h` for the list of commands.
+  eelmail {OPTIONS} users ...
 
-eelmail server OPTIONS
+    Manage eelmail user accounts.
+    Run `eelmail users -h` for the list of commands.
 
-  Start an imap and smtp server.
+  eelmail server {OPTIONS}
 
-  --ports.smtp  port to use for smtp (default: 25)
-  --ports.imap  port to use for imap (default: 143)
-  -d, --dir     directory to use to store data (default: ./eelmail.db)
+    Start an imap and smtp server.
 
-eelmail help
+    --ports.smtp  port to use for smtp (default: 25)
+    --ports.imap  port to use for imap (default: 143)
 
-  Show this message.
+  eelmail help
+
+    Show this message.
+
+Global options:
+
+  -d, --dir  directory to use to store data
+             default: $EELMAIL_DATADIR or ./eelmail.db
 

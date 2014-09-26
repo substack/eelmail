@@ -7,11 +7,15 @@ var userCommand = require('accountdown-command');
 var fs = require('fs');
 var path = require('path');
 var mkdirp = require('mkdirp');
+var defined = require('defined');
 
 var argv = minimist(process.argv.slice(2), {
     alias: { d: 'dir', h: 'help' },
     default: {
-        dir: path.join(process.cwd(), 'eelmail.db'),
+        dir: defined(
+            process.env.EELMAIL_DATADIR,
+            path.join(process.cwd(), 'eelmail.db')
+        ),
         ports: { smtp: 25, imap: 143 }
     }
 });
@@ -25,7 +29,8 @@ function createMail () {
 if (argv._[0] === 'users') {
     var em = createMail();
     var opts = { command: 'eelmail users' };
-    userCommand(em.users, process.argv.slice(3), opts, function (err) {
+    var args = process.argv.slice(process.argv.indexOf('users') + 1);
+    userCommand(em.users, args, opts, function (err) {
         if (err) {
             console.error(err + '');
             process.exit(1);
