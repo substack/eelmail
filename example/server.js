@@ -1,10 +1,8 @@
 var eelmail = require('../');
-var level = require('level');
-var bytewise = require('bytewise');
+var level = require('level-party');
 
-var db = level('./data.db');
-var em = eelmail(db);
+var db = level('./data/db');
+var em = eelmail(db, { dir: './data' });
 
-em.createServer('smtp').listen(9025);
-em.createServer('pop').listen(9110);
-em.createServer('imap').listen(9143);
+em.createServer('smtp').listen(25);
+em.createServer('imap').listen(143);
