@@ -20,9 +20,14 @@ function Eel (db, opts) {
     if (!opts) opts = {};
     this.users = opts.users || accountdown(db, { login: { basic: basic } });
     this.mailbox = opts.mailbox || maildb(db, opts);
+    this.db = db;
 }
 
 Eel.prototype.createServer = function (name, opts) {
     if (!has(services, name)) return undefined;
     return services[name](this, opts);
 };
+
+Eel.prototype.close = function () {
+    this.db.close();
+}
