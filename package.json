@@ -7,14 +7,15 @@
     "eelmail": "bin/cmd.js"
   },
   "dependencies": {
-    "accountdown": "^1.0.2",
+    "accountdown": "^2.0.0",
     "accountdown-basic": "^1.0.0",
+    "accountdown-command": "^1.0.0",
     "ansi-color-stream": "^1.0.0",
     "bytewise": "~0.7.0",
     "duplexer2": "~0.0.2",
     "has": "~0.0.1",
     "imap-parser": "~0.0.1",
-    "level": "~0.18.0",
+    "level-party": "^1.0.1",
     "maildb": "^2.2.0",
     "smtp-protocol": "^2.3.2",
     "through2": "^1.0.0",
