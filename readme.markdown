@@ -120,7 +120,7 @@ Received: from localhost.localdomain [::1]
 subject: yo
 Message-Id: <20140926165141.5C06D740061@beep>
 Date: Fri, 26 Sep 2014 09:51:41 -0700 (PDT)
-From: substack@localhost.localdomain
+From: alice@arpa.mil
 
 beep boop
 ? 
