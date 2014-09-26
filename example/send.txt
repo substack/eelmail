@@ -4,6 +4,6 @@ rcpt to: mail@substack.net
 data
 subject: yo
 
-
-beep boop
+beep boop!!!
 .
+quit

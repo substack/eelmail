@@ -3,9 +3,183 @@
 email server providing [imap](http://www.faqs.org/rfcs/rfc3501.html)
 and [smtp](http://www.faqs.org/rfcs/rfc821.html)
 
-# example
+# quick start
+
+Let's set up an email server that sounds like a fun thing to do why not.
+
+## start a server as root
+
+We can start a server as root so that it can listen on low ports (25 and 143)
+used by smtp and imap:
 
 ```
-$ fetchmail -u substack localhost
+$ sudo eelmail server -d ./maildb
 ```
 
+## start a server as non-root with iptables
+
+A better but more complicated setup involves running eelmail on non-root (>1023)
+ports and using iptables to forward traffic from low ports to the high ports.
+
+```
+$ sudo iptables -A PREROUTING -t nat -p tcp --dport 25 -j REDIRECT --to-port 9025
+$ sudo iptables -A PREROUTING -t nat -p tcp --dport 143 -j REDIRECT --to-port 9143
+$ sudo iptables -t nat -I OUTPUT -p tcp -d -d 0.0.0.0/0 --dport 25 -j REDIRECT --to-ports 9025
+$ sudo iptables -t nat -I OUTPUT -p tcp -d -d 0.0.0.0/0 --dport 143 -j REDIRECT --to-ports 9143
+```
+
+and then run eelmail as non-root on the higher ports:
+
+```
+$ eelmail server -d ./mail.db --ports.smtp=9025 --ports.imap=9143
+```
+
+## add accounts
+
+Once the server is running, create a user account:
+
+```
+$ exports EELMAIL_DATADIR=$PWD/maildata
+$ eelmail users create substack \
+  --login.basic.username=substack --login.basic.password=beepboop
+```
+
+If you are running your eelmail server as root you will need to prefix the
+eelmail command with `sudo -E`.
+
+You can also pass in the datadir with `-d`.
+
+If it worked, `eelmail users list` should now show your username:
+
+```
+$ eelmail users list
+substack
+```
+
+Repeat for additional user accounts you wish to configure.
+
+## sanity check
+
+Now that the server is running and accounts are configured, let's send a test
+email. Here I'm using `substack.net` but you should replace that with your own domain.
+
+Make sure you have netcat installed then do:
+
+```
+$ nc substack.net 25 <<END
+> helo localhost
+> mail from: alice@arpa.mil
+> rcpt to: substack@substack.net
+> data
+> subject: yo
+> 
+> beep boop
+> .
+> quit
+> END
+220 beep
+250 localhost
+250
+250
+354
+250
+221 Bye!
+```
+
+Now make sure you have an email server (like postfix on linux) running locally and do:
+
+```
+$ fetchmail -p imap -u substack substack.net
+Enter password for substack@substack.net: 
+1 message for substack at substack.net.
+reading message substack@substack.net:1 of 1 (17 header octets) (9 body octets) flushed
+```
+
+Enter the password that you configured and if it worked, you should now have
+mail in your local inbox.
+
+Type `mail` to read your email:
+
+```
+$ mail
+"/var/mail/substack": 1 message 1 new
+>N   1 substack@substack.net Fri Sep 26 09:51  18/728   yo
+? n
+Return-Path: <substack@substack.net>
+X-Original-To: substack@substack.net
+Delivered-To: substack@substack.net
+Received: from beep (beep [IPv6:::1])
+    by beep (Postfix) with ESMTP id 5C06D740061
+    for <substack@substack.net>; Fri, 26 Sep 2014 09:51:41 -0700 (PDT)
+Received: from localhost.localdomain [::1]
+    by beep with IMAP (fetchmail-6.3.21)
+    for <substack@substack.net> (single-drop); Fri, 26 Sep 2014 19:51:41 +0300 (IDT)
+Received: from localhost.localdomain [::1]
+    by beep with IMAP (fetchmail-6.3.21)
+    for <substack@substack.net> (single-drop); Fri, 26 Sep 2014 19:47:56 +0300 (IDT)
+subject: yo
+Message-Id: <20140926165141.5C06D740061@beep>
+Date: Fri, 26 Sep 2014 09:51:41 -0700 (PDT)
+From: substack@localhost.localdomain
+
+beep boop
+? 
+```
+
+## api example
+
+You can also create your own server from the api:
+
+``` js
+var eelmail = require('eelmail');
+var level = require('level-party');
+
+var db = level('./data/db');
+var em = eelmail(db, { dir: './data' });
+
+em.createServer('smtp').listen(25);
+em.createServer('imap').listen(143);
+```
+
+Here we use `level-party` so that the user accounts can be modified while the
+server is running with the `eelmail users` command. Just make sure that `-d`
+matches the data dir.
+
+# methods
+
+``` js
+var eelmail = require('eelmail')
+```
+
+## var em = eelmail(db, opts)
+
+Create an eelmail instance `em` from a `db` and `opts`.
+
+## var server = em.createServer(type)
+
+Create a server for `type`:
+
+* `'imap'` - service to fetch saved emails
+* `'smtp'` - service to receive emails
+
+## em.close()
+
+Close the database.
+
+# install
+
+With [npm](https://npmjs.org), to get the `eelmail` command, do:
+
+```
+npm install -g eelmail
+```
+
+and to get the library, do:
+
+```
+npm install eelmail
+```
+
+# license
+
+MIT

@@ -47,8 +47,12 @@ else if (argv._[0] === 'server') {
         smtp: em.createServer('smtp'),
         imap: em.createServer('imap')
     };
-    servers.smtp.listen(argv.ports.smtp);
-    servers.imap.listen(argv.ports.imap);
+    if (argv.ports.smtp !== 0 && argv.ports.smtp !== false) {
+        servers.smtp.listen(argv.ports.smtp || 25);
+    }
+    if (argv.ports.imap !== 0 && argv.ports.imap !== false) {
+        servers.imap.listen(argv.ports.imap || 143);
+    }
 }
 else showHelp(1);
 

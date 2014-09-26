@@ -30,4 +30,4 @@ Eel.prototype.createServer = function (name, opts) {
 
 Eel.prototype.close = function () {
     this.db.close();
-}
+};
