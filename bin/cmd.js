@@ -16,7 +16,7 @@ var argv = minimist(process.argv.slice(2), {
             process.env.EELMAIL_DATADIR,
             path.join(process.cwd(), 'eelmail.db')
         ),
-        ports: { smtp: 25, imap: 143 }
+        ports: { smtp: 25, imap: 143, imaps: 993 }
     }
 });
 
@@ -43,15 +43,23 @@ else if (argv.help || argv._[0] === 'help') {
 }
 else if (argv._[0] === 'server') {
     var em = createMail();
-    var servers = {
-        smtp: em.createServer('smtp'),
-        imap: em.createServer('imap')
-    };
+    var servers = {};
+    
     if (argv.ports.smtp !== 0 && argv.ports.smtp !== false) {
+        servers.smtp = em.createServer('smtp');
         servers.smtp.listen(argv.ports.smtp || 25);
     }
     if (argv.ports.imap !== 0 && argv.ports.imap !== false) {
+        servers.imap = em.createServer('imap');
         servers.imap.listen(argv.ports.imap || 143);
+    }
+    if (argv.imap) {
+        var imapArgs = {};
+        if (argv.imap.key) imapArgs.key = fs.readFileSync(argv.imap.key);
+        if (argv.imap.cert) imapArgs.cert = fs.readFileSync(argv.imap.cert);
+        if (argv.imap.pfx) imapArgs.pfx = fs.readFileSync(argv.imap.pfx);
+        servers.imaps = em.createServer('imap', imapArgs);
+        servers.imaps.listen(argv.ports.imaps || 993);
     }
 }
 else showHelp(1);
