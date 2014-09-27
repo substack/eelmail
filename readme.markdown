@@ -155,12 +155,15 @@ var eelmail = require('eelmail')
 
 Create an eelmail instance `em` from a `db` and `opts`.
 
-## var server = em.createServer(type)
+## var server = em.createServer(type, opts)
 
 Create a server for `type`:
 
 * `'imap'` - service to fetch saved emails
 * `'smtp'` - service to receive emails
+
+For `'imap'`, you can optionally create an ssl-enabled server by passing in
+`opts.key/opts.cert` or `opts.pfx`.
 
 ## em.close()
 
