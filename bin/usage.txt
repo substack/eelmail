@@ -12,6 +12,11 @@ Usage: eelmail COMMAND...
     --ports.smtp  port to use for smtp (default: 25)
     --ports.imap  port to use for imap (default: 143)
 
+    To use ssl for imap, specify one of:
+
+    --imap.cert / --imap.key  paths of tls cert and key files
+    --imap.pfx                path of pfx file
+
   eelmail help
 
     Show this message.
