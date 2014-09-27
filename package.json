@@ -1,6 +1,6 @@
 {
   "name": "eelmail",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "email server",
   "main": "index.js",
   "bin": {
@@ -12,16 +12,17 @@
     "accountdown-command": "^1.0.0",
     "ansi-color-stream": "^1.0.0",
     "bytewise": "~0.7.0",
+    "defined": "~0.0.0",
     "duplexer2": "~0.0.2",
     "has": "~0.0.1",
     "imap-parser": "~0.0.1",
+    "inherits": "^2.0.1",
     "level-party": "^1.0.1",
     "maildb": "^2.2.0",
-    "smtp-protocol": "^2.3.2",
-    "through2": "^1.0.0",
     "minimist": "^1.1.0",
     "mkdirp": "~0.5.0",
-    "defined": "~0.0.0"
+    "smtp-protocol": "^2.3.2",
+    "through2": "^1.0.0"
   },
   "devDependencies": {
     "tape": "^2.13.2"
