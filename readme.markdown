@@ -160,10 +160,10 @@ Create an eelmail instance `em` from a `db` and `opts`.
 Create a server for `type`:
 
 * `'imap'` - service to fetch saved emails
+* `'imaps'` - imap over ssl
 * `'smtp'` - service to receive emails
 
-For `'imap'`, you can optionally create an ssl-enabled server by passing in
-`opts.key/opts.cert` or `opts.pfx`.
+For `'imaps'`, you'll need to supply `opts.key/opts.cert` or `opts.pfx`.
 
 ## em.close()
 
