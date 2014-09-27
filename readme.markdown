@@ -145,6 +145,39 @@ Here we use `level-party` so that the user accounts can be modified while the
 server is running with the `eelmail users` command. Just make sure that `-d`
 matches the data dir.
 
+# usage
+
+```
+Usage: eelmail COMMAND...
+
+  eelmail {OPTIONS} users ...
+
+    Manage eelmail user accounts.
+    Run `eelmail users -h` for the list of commands.
+
+  eelmail server {OPTIONS}
+
+    Start an imap and smtp server.
+
+    --ports.smtp  port to use for smtp (default: 25)
+    --ports.imap  port to use for imap (default: 143)
+
+    To use ssl for imap, specify one of:
+
+    --imap.cert / --imap.key  paths of tls cert and key files
+    --imap.pfx                path of pfx file
+
+  eelmail help
+
+    Show this message.
+
+Global options:
+
+  -d, --dir  directory to use to store data
+             default: $EELMAIL_DATADIR or ./eelmail.db
+
+```
+
 # methods
 
 ``` js
