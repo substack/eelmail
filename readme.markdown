@@ -16,8 +16,7 @@ used by smtp and imap:
 $ sudo eelmail server -d ./maildb
 ```
 
-This isn't so great for security, so you probably want to
-[drop privleges](https://npmjs.org/package/server-as)
+This isn't so great for security, so you probably want to drop privileges
 inside the server with --uid and --gid:
 
 ```
