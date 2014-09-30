@@ -28,12 +28,11 @@ $ sudo eelmail server -d ./maildb --uid=$UID --gid=$GROUPS
 Once the server is running, create a user account:
 
 ```
-$ exports EELMAIL_DATADIR=$PWD/maildata
-$ eelmail users create substack \
+$ eelmail -d ./maildb users create substack \
   --login.basic.username=substack --login.basic.password=beepboop
 ```
 
-You can also pass in the datadir with `-d`.
+You can also pass in the datadir with `$EELMAIL_DATADIR`.
 
 If it worked, `eelmail users list` should now show your username:
 
