@@ -9,8 +9,9 @@ Usage: eelmail COMMAND...
 
     Start an imap and smtp server.
 
-    --ports.smtp  port to use for smtp (default: 25)
-    --ports.imap  port to use for imap (default: 143)
+    --ports.smtp   port to use for smtp (default: 25)
+    --ports.imap   port to use for imap (default: 143)
+    --uid / --gid  drop privileges after allocating ports
 
     To use ssl for imap, specify one of:
 

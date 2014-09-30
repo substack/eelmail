@@ -8,9 +8,10 @@ var fs = require('fs');
 var path = require('path');
 var mkdirp = require('mkdirp');
 var defined = require('defined');
+var alloc = require('tcp-bind');
 
 var argv = minimist(process.argv.slice(2), {
-    alias: { d: 'dir', h: 'help' },
+    alias: { d: 'dir', h: 'help', u: 'uid', g: 'gid' },
     default: {
         dir: defined(
             process.env.EELMAIL_DATADIR,
@@ -42,16 +43,26 @@ else if (argv.help || argv._[0] === 'help') {
     showHelp(0, function () { db.close() });
 }
 else if (argv._[0] === 'server') {
+    var portfd = {};
+    var defaults = { smtp: 25, imap: 143, imaps: 993 };
+    [ 'smtp', 'imap', 'imaps' ].forEach(function (key) {
+        if (argv.ports[key] !== 0 && argv.ports[key] !== false) {
+            portfd[key] = alloc(argv.ports[key] || defaults[key]);
+        }
+    });
+    if (argv.gid) process.setgid(argv.gid);
+    if (argv.uid) process.setuid(argv.uid);
+    
     var em = createMail();
     var servers = {};
     
     if (argv.ports.smtp !== 0 && argv.ports.smtp !== false) {
         servers.smtp = em.createServer('smtp');
-        servers.smtp.listen(argv.ports.smtp || 25);
+        servers.smtp.listen({ fd: portfd.smtp });
     }
     if (argv.ports.imap !== 0 && argv.ports.imap !== false) {
         servers.imap = em.createServer('imap');
-        servers.imap.listen(argv.ports.imap || 143);
+        servers.imap.listen({ fd: portfd.imap });
     }
     if (argv.imap) {
         var imapArgs = {};
@@ -59,7 +70,7 @@ else if (argv._[0] === 'server') {
         if (argv.imap.cert) imapArgs.cert = fs.readFileSync(argv.imap.cert);
         if (argv.imap.pfx) imapArgs.pfx = fs.readFileSync(argv.imap.pfx);
         servers.imaps = em.createServer('imap', imapArgs);
-        servers.imaps.listen(argv.ports.imaps || 993);
+        servers.imaps.listen({ fd: portfd.imaps });
     }
 }
 else showHelp(1);

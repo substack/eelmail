@@ -16,22 +16,12 @@ used by smtp and imap:
 $ sudo eelmail server -d ./maildb
 ```
 
-## start a server as non-root with iptables
-
-A better but more complicated setup involves running eelmail on non-root (>1023)
-ports and using iptables to forward traffic from low ports to the high ports.
-
-```
-$ sudo iptables -A PREROUTING -t nat -p tcp --dport 25 -j REDIRECT --to-port 9025
-$ sudo iptables -A PREROUTING -t nat -p tcp --dport 143 -j REDIRECT --to-port 9143
-$ sudo iptables -t nat -I OUTPUT -p tcp -d -d 0.0.0.0/0 --dport 25 -j REDIRECT --to-ports 9025
-$ sudo iptables -t nat -I OUTPUT -p tcp -d -d 0.0.0.0/0 --dport 143 -j REDIRECT --to-ports 9143
-```
-
-and then run eelmail as non-root on the higher ports:
+This isn't so great for security, so you probably want to
+[drop privleges](https://npmjs.org/package/server-as)
+inside the server with --uid and --gid:
 
 ```
-$ eelmail server -d ./mail.db --ports.smtp=9025 --ports.imap=9143
+$ sudo eelmail server -d ./maildb --uid=$UID --gid=$GROUPS
 ```
 
 ## add accounts
@@ -43,9 +33,6 @@ $ exports EELMAIL_DATADIR=$PWD/maildata
 $ eelmail users create substack \
   --login.basic.username=substack --login.basic.password=beepboop
 ```
-
-If you are running your eelmail server as root you will need to prefix the
-eelmail command with `sudo -E`.
 
 You can also pass in the datadir with `-d`.
 
