@@ -57,35 +57,23 @@ else if (argv._[0] === 'server') {
     var servers = {};
     
     if (argv.ports.smtp !== 0 && argv.ports.smtp !== false) {
-        servers.smtp = em.createServer('smtp', argv.smtp);
+        var sopts = getOpts('smtp', argv);
+        servers.smtp = em.createServer('smtp', sopts);
         servers.smtp.listen({ fd: portfd.smtp });
     }
     if (argv.smtp || argv.key || argv.cert || argv.pfx) {
-        var smtpArgs = { tls: true };
-        if (!argv.smtp) argv.smtp = {};
-        if (argv.smtp.key) smtpArgs.key = fs.readFileSync(argv.smtp.key);
-        else if (argv.key) smtpArgs.key = fs.readFileSync(argv.key);
-        if (argv.smtp.cert) smtpArgs.cert = fs.readFileSync(argv.smtp.cert);
-        else if (argv.cert) smtpArgs.cert = fs.readFileSync(argv.cert);
-        if (argv.smtp.pfx) smtpArgs.pfx = fs.readFileSync(argv.smtp.pfx);
-        else if (argv.pfx) smtpArgs.pfx = fs.readFileSync(argv.pfx);
-        servers.smtps = em.createServer('smtp', smtpArgs);
+        var sopts = getOpts('smtps', argv);
+        servers.smtps = em.createServer('smtp', sopts);
         servers.smtps.listen({ fd: portfd.smtps });
     }
     if (argv.ports.imap !== 0 && argv.ports.imap !== false) {
-        servers.imap = em.createServer('imap');
+        var sopts = getOpts('imap', argv);
+        servers.imap = em.createServer('imap', sopts);
         servers.imap.listen({ fd: portfd.imap });
     }
     if (argv.imap || argv.key || argv.cert || argv.pfx) {
-        if (!argv.imap) argv.imap = {};
-        var imapArgs = {};
-        if (argv.imap.key) imapArgs.key = fs.readFileSync(argv.imap.key);
-        else if (argv.key) imapArgs.key = fs.readFileSync(argv.key);
-        if (argv.imap.cert) imapArgs.cert = fs.readFileSync(argv.imap.cert);
-        else if (argv.cert) imapArgs.cert = fs.readFileSync(argv.cert);
-        if (argv.imap.pfx) imapArgs.pfx = fs.readFileSync(argv.imap.pfx);
-        else if (argv.pfx) imapArgs.pfx = fs.readFileSync(argv.pfx);
-        servers.imaps = em.createServer('imap', imapArgs);
+        var sopts = getOpts('imaps', argv);
+        servers.imaps = em.createServer('imap', sopts);
         servers.imaps.listen({ fd: portfd.imaps });
     }
 }
@@ -97,4 +85,23 @@ function showHelp (code) {
         if (code) process.exit(code);
     });
     r.pipe(process.stdout);
+}
+
+function getOpts (name, argv) {
+    var opts = {};
+    if (name === 'smtps' || name === 'imaps') {
+        if (argv.key || argv.cert || argv.pfx) opts.tls = true;
+    }
+    var x = name.replace(/s$/, '');
+    
+    if (argv[x] && argv[x].key) opts.key = fs.readFileSync(argv[x].key)
+    else if (argv.key) opts.key = fs.readFileSync(argv.key)
+    
+    if (argv[x] && argv[x].cert) opts.cert = fs.readFileSync(argv[x].cert)
+    else if (argv.cert) opts.cert = fs.readFileSync(argv.cert)
+    
+    if (argv[x] && argv[x].pfx) opts.pfx = fs.readFileSync(argv[x].pfx)
+    else if (argv.pfx) opts.pfx = fs.readFileSync(argv.pfx)
+    
+    return opts;
 }
