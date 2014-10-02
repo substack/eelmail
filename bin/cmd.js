@@ -57,7 +57,7 @@ else if (argv._[0] === 'server') {
     var servers = {};
     
     if (argv.ports.smtp !== 0 && argv.ports.smtp !== false) {
-        servers.smtp = em.createServer('smtp');
+        servers.smtp = em.createServer('smtp', argv.smtp);
         servers.smtp.listen({ fd: portfd.smtp });
     }
     if (argv.ports.imap !== 0 && argv.ports.imap !== false) {

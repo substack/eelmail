@@ -181,7 +181,8 @@ Create a server for `type`:
 * `'imaps'` - imap over ssl
 * `'smtp'` - service to receive emails
 
-For `'imaps'`, you'll need to supply `opts.key/opts.cert` or `opts.pfx`.
+For `'imaps'` and `'smtp'`, you'll need to supply `opts.key/opts.cert` or
+`opts.pfx`.
 
 ## em.close()
 
