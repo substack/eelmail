@@ -60,11 +60,15 @@ else if (argv._[0] === 'server') {
         servers.smtp = em.createServer('smtp', argv.smtp);
         servers.smtp.listen({ fd: portfd.smtp });
     }
-    if (argv.smtp) {
+    if (argv.smtp || argv.key || argv.cert || argv.pfx) {
         var smtpArgs = { tls: true };
+        if (!argv.smtp) argv.smtp = {};
         if (argv.smtp.key) smtpArgs.key = fs.readFileSync(argv.smtp.key);
+        else if (argv.key) smtpArgs.key = fs.readFileSync(argv.key);
         if (argv.smtp.cert) smtpArgs.cert = fs.readFileSync(argv.smtp.cert);
+        else if (argv.cert) smtpArgs.cert = fs.readFileSync(argv.cert);
         if (argv.smtp.pfx) smtpArgs.pfx = fs.readFileSync(argv.smtp.pfx);
+        else if (argv.pfx) smtpArgs.pfx = fs.readFileSync(argv.pfx);
         servers.smtps = em.createServer('smtp', smtpArgs);
         servers.smtps.listen({ fd: portfd.smtps });
     }
@@ -72,11 +76,15 @@ else if (argv._[0] === 'server') {
         servers.imap = em.createServer('imap');
         servers.imap.listen({ fd: portfd.imap });
     }
-    if (argv.imap) {
+    if (argv.imap || argv.key || argv.cert || argv.pfx) {
+        if (!argv.imap) argv.imap = {};
         var imapArgs = {};
         if (argv.imap.key) imapArgs.key = fs.readFileSync(argv.imap.key);
+        else if (argv.key) imapArgs.key = fs.readFileSync(argv.key);
         if (argv.imap.cert) imapArgs.cert = fs.readFileSync(argv.imap.cert);
+        else if (argv.cert) imapArgs.cert = fs.readFileSync(argv.cert);
         if (argv.imap.pfx) imapArgs.pfx = fs.readFileSync(argv.imap.pfx);
+        else if (argv.pfx) imapArgs.pfx = fs.readFileSync(argv.pfx);
         servers.imaps = em.createServer('imap', imapArgs);
         servers.imaps.listen({ fd: portfd.imaps });
     }
